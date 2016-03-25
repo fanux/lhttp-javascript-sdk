@@ -123,5 +123,5 @@ function Message(message) {
     }
 }
 
-var m = new rawMessage("LHTTP/1.0 command\r\nh1:v1\r\nh2:v2\r\nbody");
+var m = new Message("LHTTP/1.0 command\r\nh1:v1\r\nh2:v2\r\nbody");
 m.encode();
