@@ -83,7 +83,7 @@ function Message(message) {
     _this.headers = {};
     _this.body = ""
 
-    var _this.decode = function() {
+    _this.decode = function() {
         var array = _this.rawMessage.split("\r\n\r\n");
         var command_and_headers = array[0];
         _this.body = array[1];
@@ -106,20 +106,20 @@ function Message(message) {
         }
     }
 
-    var _this.encode = function() {
+    _this.encode = function() {
         var msg = PROTOCOL_AND_VER + " " + _this.command + "\r\n";
         for (var h in _this.headers) {
             msg += h + ":" + _this.headers[h] + "\r\n";
         }
-        msg += "\r\n" + body;
+        msg += "\r\n" + _this.body;
 
-        console.log("encode msg:" , msg);
+        console.log("encode msg: " , msg);
 
         return msg;
     }
 
     if (message.startsWith(PROTOCOL_AND_VER)) {
-        decode();
+        _this.decode();
     }
 }
 
