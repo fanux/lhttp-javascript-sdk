@@ -83,7 +83,7 @@ function Message(message) {
     _this.headers = {};
     _this.body = ""
 
-    function decode() {
+    var decode = function() {
         var array = _this.rawMessage.split("\r\n\r\n");
         var command_and_headers = array[0];
         _this.body = array[1];
@@ -106,7 +106,7 @@ function Message(message) {
         }
     }
 
-    function encode() {
+    var encode = function() {
         var msg = PROTOCOL_AND_VER + " " + _this.command + "\r\n";
         for (var h in _this.headers) {
             msg += h + ":" + _this.headers[h] + "\r\n";
