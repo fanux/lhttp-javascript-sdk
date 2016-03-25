@@ -62,7 +62,7 @@ function Context(conn, message) {
         if (_this.resp.headers == {}) {
             _this.resp.headers = _this.req.headers;
         }
-        _this.conn.send(_this.reap.encode())
+        _this.conn.send(_this.resp.encode())
     }
 
     function getMultipart() {
@@ -92,6 +92,7 @@ function Message(message) {
     }
 
     function encode() {
+        var msg = PROTOCOL_AND_VER + " " + _this.command + "\r\n";
         //TODO
     }
 
