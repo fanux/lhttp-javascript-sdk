@@ -87,16 +87,41 @@ function Message(message) {
         var array = _this.rawMessage.split("\r\n\r\n");
         var command_and_headers = array[0];
         _this.body = array[1];
+        console.log("body: " + _this.body);
 
-        //TODO
+        var slice = command_and_headers.split("\r\n");
+        _this.command = slice[0].slice(PROTOCOL_AND_VER.length + 1);
+        console.log("command: " + _this.command);
+
+        var k,v;
+        var temp;
+        for (var i = 1; i < slice.length; i++) {
+            temp = slice[i].split(":");
+            k = temp[0];
+            v = temp[1];
+
+            console.log("header key: " + k + " header value: " + v);
+
+            _this.headers[k] = v;
+        }
     }
 
     function encode() {
         var msg = PROTOCOL_AND_VER + " " + _this.command + "\r\n";
-        //TODO
+        for (var h in _this.headers) {
+            msg += h + ":" + _this.headers[h] + "\r\n";
+        }
+        msg += "\r\n" + body;
+
+        console.log("encode msg:" , msg);
+
+        return msg;
     }
 
     if (message.startWith(PROTOCOL_AND_VER)) {
         decode();
     }
 }
+
+var m = new rawMessage("LHTTP/1.0 command\r\nh1:v1\r\nh2:v2\r\nbody");
+m.encode();
