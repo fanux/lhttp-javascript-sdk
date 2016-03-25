@@ -118,7 +118,7 @@ function Message(message) {
         return msg;
     }
 
-    if (message.startWith(PROTOCOL_AND_VER)) {
+    if (message.startsWith(PROTOCOL_AND_VER)) {
         decode();
     }
 }
