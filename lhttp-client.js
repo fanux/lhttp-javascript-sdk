@@ -83,7 +83,7 @@ function Message(message) {
     _this.headers = {};
     _this.body = ""
 
-    var decode = function() {
+    var _this.decode = function() {
         var array = _this.rawMessage.split("\r\n\r\n");
         var command_and_headers = array[0];
         _this.body = array[1];
@@ -106,7 +106,7 @@ function Message(message) {
         }
     }
 
-    var encode = function() {
+    var _this.encode = function() {
         var msg = PROTOCOL_AND_VER + " " + _this.command + "\r\n";
         for (var h in _this.headers) {
             msg += h + ":" + _this.headers[h] + "\r\n";
@@ -123,5 +123,5 @@ function Message(message) {
     }
 }
 
-var m = new Message("LHTTP/1.0 command\r\nh1:v1\r\nh2:v2\r\nbody");
+var m = new Message("LHTTP/1.0 command\r\nh1:v1\r\nh2:v2\r\n\r\nbody");
 m.encode();
