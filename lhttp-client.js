@@ -9,19 +9,19 @@ function Lhttp(url) {
     _this.on_error = function(c){console.log("base on error")}
 
     _this.conn.onclose = function(evt) {
-        c = new Context(_this.conn, evt.data);
+        var c = new Context(_this.conn, evt.data);
         _this.on_close(c);
     }
     _this.conn.onopen = function(evt) {
-        c = new Context(_this.conn, null);
+        var c = new Context(_this.conn, null);
         _this.on_open(c);
     }
     _this.conn.onmessage = function(evt) {
-        c = new Context(_this.conn, evt.data);
+        var c = new Context(_this.conn, evt.data);
         _this.on_onmessage(c);
     }
     _this.conn.onerror = function(evt) {
-        c = new Context(_this.conn, evt.data);
+        var c = new Context(_this.conn, evt.data);
         _this.on_error(c);
     }
 }
