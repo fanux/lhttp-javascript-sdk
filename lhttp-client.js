@@ -151,5 +151,5 @@ function Message(message) {
     }
 }
 
-var m = new Message("LHTTP/1.0 command\r\nh1:v1\r\nh2:v2\r\n\r\nbody");
-m.encode();
+//var m = new Message("LHTTP/1.0 command\r\nh1:v1\r\nh2:v2\r\n\r\nbody");
+//m.encode();
