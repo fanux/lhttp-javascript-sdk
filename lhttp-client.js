@@ -1,6 +1,6 @@
 function Lhttp(url) {
     var _this = this;
-    _this.conn = new websocket(url)
+    _this.conn = new WebSocket(url);
 
     //client interface
     _this.on_open = function(c){console.log("base on open")}
@@ -17,14 +17,20 @@ function Lhttp(url) {
         _this.on_open(c);
     }
     _this.conn.onmessage = function(evt) {
+        console.log("receive message: " + evt.data);
         var c = new Context(_this.conn, evt.data);
-        _this.on_onmessage(c);
+        _this.on_message(c);
     }
     _this.conn.onerror = function(evt) {
         var c = new Context(_this.conn, evt.data);
         _this.on_error(c);
     }
+
+    _this.context = new Context(_this.conn, null);
 }
+
+var HEADER_KEY_PUBLISH = "publish";
+var HEADER_KEY_SUBSCRIBE = "subscribe";
 
 function Context(conn, message) {
     var _this = this;
@@ -34,27 +40,27 @@ function Context(conn, message) {
     _this.upstreamURL = "";
     _this.multiparts = [];
 
-    function setCommand(str) {
+    _this.setCommand = function(str) {
         _this.resp.command = str;
     }
 
-    function getCommand() {
+    _this.getCommand = function() {
         return _this.req.command;
     }
 
-    function getHeader(str) {
+    _this.getHeader = function(str) {
         return _this.req.headers;
     }
 
-    function addHeader(key, value) {
+    _this.addHeader = function(key, value) {
         _this.resp.headers[key] = value;
     }
 
-    function getBody() {
+    _this.getBody = function() {
         return _this.req.body;
     }
 
-    function send(body) {
+    _this.send = function(body) {
         _this.resp.body = body;
         if (_this.resp.command == "") {
             _this.resp.command = _this.req.command;
@@ -62,15 +68,37 @@ function Context(conn, message) {
         if (_this.resp.headers == {}) {
             _this.resp.headers = _this.req.headers;
         }
-        _this.conn.send(_this.resp.encode())
+        _this.conn.send(_this.resp.encode());
+        console.log("send message: " + _this.resp.encode());
     }
 
-    function getMultipart() {
+    _this.getMultipart = function() {
         return _this.multiparts;
     }
 
-    function appendPart(headers, body) {
+    _this.appendPart = function(headers, body) {
         //TODO
+    }
+
+    function assembleMessage(channel, command, headers, body) {
+        _this.setCommand(command);
+
+        for(var h in headers){
+            _this.addHeader(h, headers[h]);
+        }
+
+        _this.send(body);
+    }
+
+    _this.publish = function(channel, command, headers, body) {
+        //console.log("publish body: " + body);
+        _this.addHeader(HEADER_KEY_PUBLISH, channel);
+        assembleMessage(channel, command, headers, body);
+    }
+
+    _this.subscribe = function(channel, command, headers, body) {
+        _this.addHeader(HEADER_KEY_SUBSCRIBE, channel);
+        assembleMessage(channel, command, headers, body);
     }
 }
 
@@ -118,7 +146,7 @@ function Message(message) {
         return msg;
     }
 
-    if (message.startsWith(PROTOCOL_AND_VER)) {
+    if (message && message.startsWith(PROTOCOL_AND_VER)) {
         _this.decode();
     }
 }
