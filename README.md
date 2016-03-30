@@ -1,5 +1,5 @@
 #client of [lhttp](https://github.com/fanux/lhttp) - a powerful go websocket framework
-
+:dog:
 ###usage
 ```javascript
 lhttp_client = new Lhttp("ws://localhost:8081/chat");
